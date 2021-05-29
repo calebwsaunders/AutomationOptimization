@@ -22,16 +22,6 @@ files = glob.glob('*.xlsx')
 # Making an array to accept an array for each line, so each occurrence, from each excel document.
 occurrences = []
 
-def append_to_occurrences(occurrence):
-    global occurrences
-    item_id = sheet[f'B{row}'].value
-    description = sheet[f'C{row}'].value
-    dispenses = sheet[f'G{row}'].value
-    quantity = sheet[f'H{row}'].value
-    occurrence = [item_id, description, dispenses, quantity]
-    occurrences.append(occurrence)
-    return
-
 # Ask the customer what they want.
 # The numbered output will be:
 # 1 = all medications
@@ -75,6 +65,16 @@ def check_for_excludable_items(occurrence):
         else:
             continue
     return output
+
+def append_to_occurrences(row):
+    global occurrences
+    item_id = sheet[f'B{row}'].value
+    description = sheet[f'C{row}'].value
+    dispenses = sheet[f'G{row}'].value
+    quantity = sheet[f'H{row}'].value
+    row = [item_id, description, dispenses, quantity]
+    occurrences.append(row)
+    return
 
 # Setting up a loop to iterate over every excel file identified above.
 for file in files:
@@ -164,16 +164,12 @@ sheet.oddHeader.left.size = 16
 sheet.oddHeader.left.font = 'Times New Roman'
 
 # Formatting the columns
-# sheet.merge_cells('A1:D1')
-# sheet['A1'].font = fontObjTitle
-# sheet['A1'].alignment = Alignment(horizontal='center')
 sheet['A1'].font = fontObjHeader
 sheet['B1'].font = fontObjHeader
 sheet['C1'].font = fontObjHeader
 sheet['D1'].font = fontObjHeader
 
 # Writing the title and header information
-# sheet['A1'] = f'Automation Optimization Review: {month_abbr}{data_year}'
 sheet['A1'] = 'Item ID'
 sheet['B1'] = 'Description'
 sheet['C1'] = 'Dispenses'
