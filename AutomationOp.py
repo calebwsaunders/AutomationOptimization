@@ -22,6 +22,16 @@ files = glob.glob('*.xlsx')
 # Making an array to accept an array for each line, so each occurrence, from each excel document.
 occurrences = []
 
+def append_to_occurrences(occurrence):
+    global occurrences
+    item_id = sheet[f'B{row}'].value
+    description = sheet[f'C{row}'].value
+    dispenses = sheet[f'G{row}'].value
+    quantity = sheet[f'H{row}'].value
+    occurrence = [item_id, description, dispenses, quantity]
+    occurrences.append(occurrence)
+    return
+
 # Ask the customer what they want.
 # The numbered output will be:
 # 1 = all medications
@@ -80,70 +90,40 @@ for file in files:
         else:
             # User selected #1
             if data_request == 'Both controlled and non-controlled medications':
-                item_id = sheet[f'B{row}'].value
-                description = sheet[f'C{row}'].value
-                dispenses = sheet[f'G{row}'].value
-                quantity = sheet[f'H{row}'].value
-                occurrence = [item_id, description, dispenses, quantity]
-                occurrences.append(occurrence)
+                append_to_occurrences(row)
 
             # User selected #2
             elif data_request == 'Only non-controlled medications':
                 if sheet[f'D{row}'].value in all_controlled_medications:
                     continue
                 else:
-                    item_id = sheet[f'B{row}'].value
-                    description = sheet[f'C{row}'].value
-                    dispenses = sheet[f'G{row}'].value
-                    quantity = sheet[f'H{row}'].value
-                    occurrence = [item_id, description, dispenses, quantity]
-                    occurrences.append(occurrence)
+                    append_to_occurrences(row)
 
             # User selected #3
             elif data_request == 'Both non-controlled and CIII-Vs':
                 if sheet[f'D{row}'].value in narcotics:
                     continue
                 else:
-                    item_id = sheet[f'B{row}'].value
-                    description = sheet[f'C{row}'].value
-                    dispenses = sheet[f'G{row}'].value
-                    quantity = sheet[f'H{row}'].value
-                    occurrence = [item_id, description, dispenses, quantity]
-                    occurrences.append(occurrence)
+                    append_to_occurrences(row)
 
             # User selected #4
             elif data_request == 'Only all controlled medications':
                 if sheet[f'D{row}'].value in all_controlled_medications:
-                    item_id = sheet[f'B{row}'].value
-                    description = sheet[f'C{row}'].value
-                    dispenses = sheet[f'G{row}'].value
-                    quantity = sheet[f'H{row}'].value
-                    occurrence = [item_id, description, dispenses, quantity]
-                    occurrences.append(occurrence)
+                    append_to_occurrences(row)
                 else:
                     continue
 
             # User selected #5
             elif data_request == 'Only CIII-Vs':
                 if sheet[f'D{row}'].value in minor_controlled_medications:
-                    item_id = sheet[f'B{row}'].value
-                    description = sheet[f'C{row}'].value
-                    dispenses = sheet[f'G{row}'].value
-                    quantity = sheet[f'H{row}'].value
-                    occurrence = [item_id, description, dispenses, quantity]
-                    occurrences.append(occurrence)
+                    append_to_occurrences(row)
                 else:
                     continue
 
             # User selected #6
             elif data_request == 'Only CIIs':
                 if sheet[f'D{row}'].value in narcotics:
-                    item_id = sheet[f'B{row}'].value
-                    description = sheet[f'C{row}'].value
-                    dispenses = sheet[f'G{row}'].value
-                    quantity = sheet[f'H{row}'].value
-                    occurrence = [item_id, description, dispenses, quantity]
-                    occurrences.append(occurrence)
+                    append_to_occurrences(row)
                 else:
                     continue
 
