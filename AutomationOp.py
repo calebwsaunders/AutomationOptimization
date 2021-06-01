@@ -1,6 +1,7 @@
 #! AutomationOp.py - A simple python script to take the data from a dispense
 #  report from MHSG and make it more available for aligning a site's automation
 #  with their dispensing history.
+#  python AutomationOp.py
 
 import openpyxl
 import glob
@@ -60,7 +61,6 @@ def get_item_id(occurrence):
     """Going to return the item id from each occurrence to be used to sort the occurrences."""
     item_id = occurrence[0]
     return item_id
-
 
 def check_for_excludable_items(occurrence):
     """Searching the description of each occurrence and checking against all excludable items.
