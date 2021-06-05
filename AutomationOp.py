@@ -10,11 +10,6 @@ import pyinputplus as pyip
 from openpyxl.styles import Font
 from datetime import date
 
-# A variable for assigning the year to the output file
-data_year = date.today().year
-data_month = date.today().month
-month_abbr = calendar.month_abbr[data_month]
-
 # Using glob to make a list of all the excel files in the current directory.
 files = glob.glob('*.xlsx')
 
@@ -57,10 +52,19 @@ excluded_items = ['inhaler', 'patch', 'packet', 'cream', 'gel', 'solution', 'sup
                   'anastrozole', 'letrozole', 'methotrexate', 'tamoxifen']
 
 
+def get_date():
+    """Determining the current month and year and returning the month abbreviation and year."""
+    data_year = date.today().year
+    data_month = date.today().month
+    month_abbr = calendar.month_abbr[data_month]
+    return f'{month_abbr}{data_year}'
+
+
 def get_item_id(occurrence):
     """Going to return the item id from each occurrence to be used to sort the occurrences."""
     item_id = occurrence[0]
     return item_id
+
 
 def check_for_excludable_items(occurrence):
     """Searching the description of each occurrence and checking against all excludable items.
@@ -73,6 +77,7 @@ def check_for_excludable_items(occurrence):
         else:
             continue
     return output
+
 
 def append_to_occurrences(row):
     global occurrences
@@ -102,6 +107,54 @@ def append_to_new_or_refill_occurrences(row):
         occurrence = [item_id, description, dispenses, quantity]
         refill_occurrences.append(occurrence)
     return
+
+def save_workbook(wb):
+    """Will get the date and type of workbook, name it, and close it."""
+    global data_request
+    global new_refill_request
+    # Determined the type of report and name accordingly.
+    if data_request == 'Both controlled and non-controlled medications':
+        if new_refill_request == 'Yes':
+            wb.save(f'Automation Combined All Medication Review {get_date()}.xlsx')
+            return
+        else:
+            wb.save(f'Automation Separated All Medication Review {get_date()}.xlsx')
+            return
+    elif data_request == 'Only non-controlled medications':
+        if new_refill_request == 'Yes':
+            wb.save(f'Automation Combined Legend Review {get_date()}.xlsx')
+            return
+        else:
+            wb.save(f'Automation Separated Legend Review {get_date()}.xlsx')
+            return
+    elif data_request == 'Both non-controlled and CIII-Vs':
+        if new_refill_request == 'Yes':
+            wb.save(f'Automation Combined Legend and Minor Controls Review {get_date()}.xlsx')
+            return
+        else:
+            wb.save(f'Automation Separated Legend and Minor Controls Review {get_date()}.xlsx')
+            return
+    elif data_request == 'Only all controlled medications':
+        if new_refill_request == 'Yes':
+            wb.save(f'Automation Combined Controlled Medication Review {get_date()}.xlsx')
+            return
+        else:
+            wb.save(f'Automation Separated Controlled Medication Review {get_date()}.xlsx')
+            return
+    elif data_request == 'Only CIII-Vs':
+        if new_refill_request == 'Yes':
+            wb.save(f'Automation Combined Minor Controls Review {get_date()}.xlsx')
+            return
+        else:
+            wb.save(f'Automation Separated Minor Controls Review {get_date()}.xlsx')
+            return
+    elif data_request == 'Only CIIs':
+        if new_refill_request == 'Yes':
+            wb.save(f'Automation Combined CII Review {get_date()}.xlsx')
+            return
+        else:
+            wb.save(f'Automation Separated CII Review {get_date()}.xlsx')
+            return
 
 # Setting up a loop to iterate over every excel file identified above.
 for file in files:
@@ -178,8 +231,8 @@ for file in files:
 
     # Excluding medications and supplies that cannot be placed in automation, then adding pertinent
     # items to a new list.
-    pertinent_occurrences = []         # For combined list.
-    pertinent_new_occurrences = []     # For new occurrences when separating.
+    pertinent_occurrences = []  # For combined list.
+    pertinent_new_occurrences = []  # For new occurrences when separating.
     pertinent_refill_occurrences = []  # For refill occurrences when separating.
 
     if new_refill_request == 'Yes':
@@ -207,7 +260,7 @@ for file in files:
         fontObjHeader = Font(name='Times New Roman', size=14)
 
         # Formatting and writing to the header.
-        sheet.oddHeader.center.text = f'Automation Optimization: {month_abbr}{data_year}'
+        sheet.oddHeader.center.text = f'Automation Optimization: {get_date()}'
         sheet.oddHeader.center.size = 16
         sheet.oddHeader.center.font = 'Times New Roman'
 
@@ -250,7 +303,7 @@ for file in files:
                 else:
                     break
 
-        wb.save(f'Automation Optimization Review {month_abbr}{data_year}.xlsx')
+        save_workbook(wb)
         wb.close()
 
     else:
@@ -291,11 +344,11 @@ for file in files:
         fontObjHeader = Font(name='Times New Roman', size=14)
 
         # Formatting and writing to the header.
-        sheet_new.oddHeader.center.text = f'Automation Optimization: {month_abbr}{data_year}'
+        sheet_new.oddHeader.center.text = f'Automation Optimization: {get_date()}'
         sheet_new.oddHeader.center.size = 16
         sheet_new.oddHeader.center.font = 'Times New Roman'
 
-        sheet_refills.oddHeader.center.text = f'Automation Optimization: {month_abbr}{data_year}'
+        sheet_refills.oddHeader.center.text = f'Automation Optimization: {get_date()}'
         sheet_refills.oddHeader.center.size = 16
         sheet_refills.oddHeader.center.font = 'Times New Roman'
 
@@ -374,8 +427,7 @@ for file in files:
 
         # Cleaning up the sheet before saving.
         sheet_to_delete = wb['Sheet']
-        wb.remove_sheet(sheet_to_delete)
+        wb.remove(sheet_to_delete)
 
-        # Save and close the finished product.
-        wb.save(f'Automation Optimization Review {month_abbr}{data_year}.xlsx')
+        save_workbook(wb)
         wb.close()
