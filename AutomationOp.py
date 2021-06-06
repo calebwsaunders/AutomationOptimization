@@ -1,7 +1,6 @@
 #! AutomationOp.py - A simple python script to take the data from a dispense
 #  report from MHSG and make it more available for aligning a site's automation
 #  with their dispensing history.
-#  python AutomationOp.py
 
 import openpyxl
 import glob
