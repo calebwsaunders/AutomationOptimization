@@ -10,6 +10,7 @@ import pyinputplus as pyip
 from openpyxl.styles import Font
 from datetime import date
 
+
 # Using glob to make a list of all the excel files in the current directory.
 files = glob.glob('*.xlsx')
 
@@ -21,7 +22,7 @@ new_occurrences = []
 refill_occurrences = []
 
 # Asking the customer is they want to separate new from refills.
-print('\nDo you want to combine new prescriptions and refills ("Yes" to combine, "No" to separate?')
+print('\nDo you want to combine new prescriptions and refills ("Yes" to combine, "No" to separate)?')
 new_refill_request = pyip.inputMenu(['Yes', 'No'], numbered=True)
 
 # Ask the customer what they want.
@@ -89,6 +90,7 @@ def append_to_occurrences(row):
     occurrences.append(occurrence)
     return
 
+
 def append_to_new_or_refill_occurrences(row):
     global new_occurrences
     global refill_occurrences
@@ -108,6 +110,7 @@ def append_to_new_or_refill_occurrences(row):
         refill_occurrences.append(occurrence)
     return
 
+
 def save_workbook(wb):
     """Will get the date and type of workbook, name it, and close it."""
     global data_request
@@ -115,46 +118,47 @@ def save_workbook(wb):
     # Determined the type of report and name accordingly.
     if data_request == 'Both controlled and non-controlled medications':
         if new_refill_request == 'Yes':
-            wb.save(f'Automation Combined All Medication Review {get_date()}.xlsx')
+            wb.save(f'Combined All Medication Review {get_date()}.xlsx')
             return
         else:
-            wb.save(f'Automation Separated All Medication Review {get_date()}.xlsx')
+            wb.save(f'Separated All Medication Review {get_date()}.xlsx')
             return
     elif data_request == 'Only non-controlled medications':
         if new_refill_request == 'Yes':
-            wb.save(f'Automation Combined Legend Review {get_date()}.xlsx')
+            wb.save(f'Combined Legend Review {get_date()}.xlsx')
             return
         else:
-            wb.save(f'Automation Separated Legend Review {get_date()}.xlsx')
+            wb.save(f'Separated Legend Review {get_date()}.xlsx')
             return
     elif data_request == 'Both non-controlled and CIII-Vs':
         if new_refill_request == 'Yes':
-            wb.save(f'Automation Combined Legend and Minor Controls Review {get_date()}.xlsx')
+            wb.save(f'Combined Legend and Minor Controls Review {get_date()}.xlsx')
             return
         else:
-            wb.save(f'Automation Separated Legend and Minor Controls Review {get_date()}.xlsx')
+            wb.save(f'Separated Legend and Minor Controls Review {get_date()}.xlsx')
             return
     elif data_request == 'Only all controlled medications':
         if new_refill_request == 'Yes':
-            wb.save(f'Automation Combined Controlled Medication Review {get_date()}.xlsx')
+            wb.save(f'Combined Controlled Medication Review {get_date()}.xlsx')
             return
         else:
-            wb.save(f'Automation Separated Controlled Medication Review {get_date()}.xlsx')
+            wb.save(f'Separated Controlled Medication Review {get_date()}.xlsx')
             return
     elif data_request == 'Only CIII-Vs':
         if new_refill_request == 'Yes':
-            wb.save(f'Automation Combined Minor Controls Review {get_date()}.xlsx')
+            wb.save(f'Combined Minor Controls Review {get_date()}.xlsx')
             return
         else:
-            wb.save(f'Automation Separated Minor Controls Review {get_date()}.xlsx')
+            wb.save(f'Separated Minor Controls Review {get_date()}.xlsx')
             return
     elif data_request == 'Only CIIs':
         if new_refill_request == 'Yes':
-            wb.save(f'Automation Combined CII Review {get_date()}.xlsx')
+            wb.save(f'Combined CII Review {get_date()}.xlsx')
             return
         else:
-            wb.save(f'Automation Separated CII Review {get_date()}.xlsx')
+            wb.save(f'Separated CII Review {get_date()}.xlsx')
             return
+
 
 # Setting up a loop to iterate over every excel file identified above.
 for file in files:
