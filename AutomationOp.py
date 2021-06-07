@@ -49,7 +49,7 @@ excluded_items = ['inhaler', 'patch', 'packet', 'cream', 'gel', 'solution', 'sup
                   '[60EA]', '[50EA]', '[30EA]', '[25EA]', '[21EA]', '[16EA]', '[8EA]', '[6EA]', '[4EA]',
                   '[3EA]', '[2EA]', '[1EA]', '[3PENS]', '[2PENS]', 'ring', 'needle', 'lancet', 'Monitor',
                   'spray', '(60EA/30Dose)', '(60EA/30Dos)', 'test strip', 'Inj', 'Kit', 'Ring',
-                  'anastrozole', 'letrozole', 'methotrexate', 'tamoxifen']
+                  'anastrozole', 'letrozole', 'methotrexate', 'tamoxifen', 'linaclotide']
 
 
 def get_date():
